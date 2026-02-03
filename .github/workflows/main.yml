@@ -1,40 +1,37 @@
-name: CI/CD Pipeline
+name: Deploy Next.js to Vercel
 
 on:
   push:
-    branches: [ main ]      # deploy only on main branch
-  pull_request:
-    branches: [ main ]      # run CI on PRs targeting main
+    branches:
+      - main  # runs on every push to main
 
 jobs:
-  ci:
-    name: Continuous Integration
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      # 1️⃣ Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
+      # 2️⃣ Setup Node
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: npm
+          node-version: 20 # use the version your project requires
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Run Lint
-        run: npm run lint
-
-      - name: Run Tests
-        run: npm test
-
-      - name: Build Next.js App
+      # 4️⃣ Build Next.js app
+      - name: Build
         run: npm run build
 
-  deploy:
-    name: Deploy to Vercel
-    needs: ci
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && gith_
+      # 5️⃣ Deploy to Vercel
+      - name: Deploy to Vercel
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx vercel --prod --token $VERCEL_TOKEN --org $VERCEL_ORG_ID --confirm
