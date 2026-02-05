@@ -1,13 +1,13 @@
-name: CI Pipeline
+name: CI/CD – Next.js to Vercel
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,9 +21,15 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
-        working-directory: ci-cd-demo
+        run: npm install --legacy-peer-deps
 
-      - name: Build Next.js app
+      - name: Build Next.js
         run: npm run build
-        working-directory: ci-cd-demo
+
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
