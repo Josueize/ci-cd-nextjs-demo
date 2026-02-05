@@ -1,11 +1,16 @@
-import { Roboto } from 'next/font/google';
+export const metadata = {
+  title: "CI/CD Demo",
+  description: "Next.js CI/CD Pipeline Demo"
+};
 
-const roboto = Roboto({ subsets: ['latin'], weight: '400' });
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <body className={roboto.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
