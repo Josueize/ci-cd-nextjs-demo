@@ -1,35 +1,35 @@
-name: CI/CD – Next.js to Vercel
+name: Next.js CI
 
+# Trigger the workflow on push or pull request to main
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repo
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
-          cache: npm
+          node-version: 20
 
+      # 3️⃣ Install dependencies
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install
 
+      # 4️⃣ Build the Next.js app
       - name: Build Next.js
         run: npm run build
 
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: "--prod"
+      # 5️⃣ Optional: Run tests (if you have any)
+      # - name: Run tests
+      #   run: npm test

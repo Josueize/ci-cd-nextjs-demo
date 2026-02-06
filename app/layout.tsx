@@ -1,6 +1,8 @@
+import '../styles/globals.css';
+
 export const metadata = {
-  title: "CI/CD Demo",
-  description: "Next.js CI/CD Pipeline Demo"
+  title: 'MEU CI/CD Demo – Next.js App',
+  description: 'CI/CD demo application built with Next.js',
 };
 
 export default function RootLayout({
@@ -10,7 +12,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="min-h-screen bg-gray-50 text-gray-900">
+        {children}
+      </body>
     </html>
   );
 }
