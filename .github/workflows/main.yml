@@ -1,42 +1,33 @@
-name: Next.js CI/CD
+name: Build and Deploy to Vercel
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
 
-      # 3️⃣ Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
-      # 4️⃣ Build Next.js app
-      - name: Build Next.js
+      - name: Build project
         run: npm run build
 
-      # 5️⃣ Deploy to Vercel
       - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v22
+        uses: amondnet/vercel-action@v25
         with:
-          vercel-token: bZMzy4lpmAIAxAvOVltY5bvA
+          vercel-token: 6FyhCVMWzqtQqf2If0gMIrnZ
           vercel-org-id: team_szVSpMJRbCCY3TcvHEUq0gUK
           vercel-project-id: prj_UsYfOYJ7BGFX7V8fPPx7cyLLXjTU
-          vercel-args: '--prod'
           working-directory: ./
-        env:
-          VERCEL_TOKEN: bZMzy4lpmAIAxAvOVltY5bvA
